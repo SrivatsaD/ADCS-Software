@@ -90,16 +90,24 @@ int main() {
  
     // { echo "38.53"; echo "121.76"; curl -s 'https://tle.ivanstanojevic.me/api/tle/25544' | jq '.line1, .line2' | tr -d '"'; curl -s "https://ssd-api.jpl.nasa.gov/jd_cal.api?cd=$(date +%F_%T)" | jq -r '.jd'; } | ./pointdish
  
-    char lines[5][100]; //pipe to here 
+    char lines[4][100]; //pipe to here 
 
     double az;
     double el; 
 
+    FILE *fp = fopen( "PS_data.txt","r");
+    if(fp == NULL){
+        perror("Error opening file");
+        return;
+    }
 
     for (int i=0; i<=4; i++){
-        fgets(lines[i], sizeof(lines[i]), stdin);  
-        //printf("%s", lines[i]);
+        fgets(lines[i], sizeof(lines[i]),fp);  
+        //printf("%s", lines[i]);    
     }
+    
+    fclose(fp);
+
     double lat = strtod(lines[0], NULL); 
     double lon = strtod(lines[1], NULL); 
     char* tle1 = lines[2];
